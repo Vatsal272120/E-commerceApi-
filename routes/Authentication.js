@@ -33,6 +33,19 @@ Authentication.post('/login', async (req, res) => {
     const userPassword = decryptPassword(user.password);
 
     userPassword !== password && res.status(401).json('Wrong credentials!');
+
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        isUserAdmin: user.isUserAdmin,
+      },
+      process.env.JWT_SEC,
+      { expiresIn: '3d' }
+    );
+
+    const { password, ...others } = user._doc;
+
+    res.status(200).json({ ...others, accessToken });
   } catch (err) {
     res.status(404).json(err);
   }
