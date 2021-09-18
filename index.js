@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const Authentication = require('./routes/Authentication');
+
+dotenv.config();
 
 // initialise app
 const app = express();
@@ -25,3 +28,4 @@ app.use(express.json());
 app.use(cors());
 
 /* Routes */
+app.use('/api/authentication', Authentication);
