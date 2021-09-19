@@ -6,7 +6,7 @@ const { encryptPassword, decryptedPassword } = require('../Utils/passwords');
 // Register
 
 Authentication.post('/register', async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, email, password } = req.body;
   const newUser = new User({
     username,
     email,
@@ -30,9 +30,10 @@ Authentication.post('/login', async (req, res) => {
     const user = await User.findOne({ username });
     !user && res.status(401).json('Wrong credentials!');
 
-    const userPassword = decryptPassword(user.password);
+    const userPassword = decryptedPassword(user.password);
 
-    userPassword !== password && res.status(401).json('Wrong credentials!');
+    userPassword !== req.body.password &&
+      res.status(401).json('Wrong credentials!');
 
     const accessToken = jwt.sign(
       {
@@ -47,7 +48,7 @@ Authentication.post('/login', async (req, res) => {
 
     res.status(200).json({ ...others, accessToken });
   } catch (err) {
-    res.status(404).json(err);
+    console.error(err);
   }
 });
 

@@ -1,3 +1,7 @@
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 // file to encrypt and decrypt passwords
 const CryptoJS = require('crypto-js');
 
@@ -5,8 +9,8 @@ const secret = process.env.ENCRYPT_DECRYPT_SECRET_KEY;
 
 // fn ref:  https://www.npmjs.com/package/crypto-js
 
-const ecryptPassword = (password) => {
-  CryptoJS.AES.encrypt(password, secret);
+const encryptPassword = (password) => {
+  return CryptoJS.AES.encrypt(password, secret).toString();
 };
 
 const decryptedPassword = (cipherText) => {
@@ -16,4 +20,4 @@ const decryptedPassword = (cipherText) => {
   return decryptPassword;
 };
 
-module.exports = { ecryptPassword, decryptedPassword };
+module.exports = { encryptPassword, decryptedPassword };
