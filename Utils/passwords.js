@@ -10,11 +10,11 @@ const secret = process.env.ENCRYPT_DECRYPT_SECRET_KEY;
 // fn ref:  https://www.npmjs.com/package/crypto-js
 
 const encryptPassword = (password) => {
-  return CryptoJS.AES.encrypt(password, secret).toString();
+  CryptoJS.AES.encrypt(password, secret).toString();
 };
 
 const decryptedPassword = (cipherText) => {
-  let hashedText = CryptoJS.AES.decrypt(cipherText, secret);
+  const hashedText = CryptoJS.AES.decrypt(cipherText, secret);
   const decryptPassword = hashedText.toString(CryptoJS.enc.Utf8);
 
   return decryptPassword;
