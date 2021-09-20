@@ -1,6 +1,9 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-unused-expressions */
 const Authentication = require('express').Router();
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 const { encryptPassword, decryptedPassword } = require('../Utils/passwords');
 
 // Register
