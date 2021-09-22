@@ -1,28 +1,52 @@
 const express = require('express');
+const pino = require('express-pino-logger')();
+const audit = require('express-requests-logger');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const Authentication = require('./routes/Authentication');
-const https = require('https');
+
+const { log } = require('./logger');
 
 dotenv.config();
 
 // initialise app
 const app = express();
 
+app.use(
+  audit({
+    logger: log, // Existing bunyan logger
+    excludeURLs: ['health', 'metrics'], // Exclude paths which enclude 'health' & 'metrics'
+    request: {
+      maskBody: ['password'], // Mask 'password' field in incoming requests
+      excludeHeaders: ['authorization'], // Exclude 'authorization' header from requests
+      excludeBody: ['creditCard'], // Exclude 'creditCard' field from requests body
+      maskHeaders: ['*'], // Mask 'header1' header in incoming requests
+      maxBodyLength: 50, // limit length to 50 chars + '...'
+    },
+    response: {
+      maskBody: ['session_token'], // Mask 'session_token' field in response body
+      // excludeHeaders: ['*'], // Exclude all headers from responses,
+      // excludeBody: ['*'], // Exclude all body from responses
+      maskHeaders: ['header1'], // Mask 'header1' header in incoming requests
+      maxBodyLength: 50, // limit length to 50 chars + '...'
+    },
+  })
+);
+
+app.get('/', (req, res) => {
+  res.status(200).send('hello world');
+});
+
 // db config and connection
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
-    app.listen(process.env.PORT, () =>
-      console.log(
-        'App listening on port: ' +
-          process.env.PORT +
-          ' and is connected to the database'
-      )
-    );
+    app.listen(process.env.PORT, () => {
+      log.info(`Server listening at http://localhost:${process.env.PORT}`);
+    });
   })
-  .catch((err) => console.error(err));
+  .catch((err) => log.error(err));
 
 // using middlewares
 app.use(express.json());

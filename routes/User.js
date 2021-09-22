@@ -35,12 +35,3 @@ UserRouter.put('/:id', verifyTokenandAuthorize, async (req, res) => {
 });
 
 // GET ALL USER
-
-UserRouter.get('/', verifyTokenforAdmin, async (req, res) => {
-    const query = req.query.new;
-    try
-    {
-        const users = 
-    }
-  return users;
-});
