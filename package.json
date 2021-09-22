@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js | pino-pretty -c"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,9 @@
     "mongoose": "^6.0.6",
     "nodemon": "^2.0.12",
     "stripe": "^8.175.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "express-pino-logger": "^6.0.0",
+    "pino-pretty": "^7.0.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
